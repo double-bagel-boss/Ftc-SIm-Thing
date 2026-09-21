@@ -41,7 +41,7 @@ arm1 = Entity(
     scale=(3.3, 3.3, 3.3),
     texture='blue.png',
     texture_scale=(1, 1),
-    collider='box',
+    collider='mesh',
     position=(0, 0, 0),
     rotation=(-90, 0, 0)
 )
@@ -52,7 +52,7 @@ arm = Entity(
     scale=(3.3, 3.3, 3.3),
     texture='red.jpg',
     texture_scale=(1, 1),
-    collider='box',
+    collider='mesh',
     position=(0, 0, 0),
     rotation=(-90, 180, 0)
 )
@@ -304,42 +304,59 @@ def update():
         scoringareabackrightdown.collider = None
         scoringareabackrightup.enabled = True
         scoringareabackrightup.collider = 'box'
+        scoringareabackrightupcollider.enabled = True
+        scoringareabackrightupcollider.collider = 'box'
+
 
         scoringareafrontrightdown.enabled = True
         scoringareafrontrightdown.collider = 'box'
         scoringareafrontrightup.enabled = False
         scoringareafrontrightup.collider = None
+        scoringareafrontrightupcollider.enabled = False
+        scoringareafrontrightupcollider.collider = None
     else:
         scoringareabackrightdown.enabled = True
         scoringareabackrightdown.collider = 'box'
         scoringareabackrightup.enabled = False
         scoringareabackrightup.collider = None
+        scoringareabackrightupcollider.enabled = False
+        scoringareabackrightupcollider.collider = None
 
         scoringareafrontrightdown.enabled = False
         scoringareafrontrightdown.collider = None
         scoringareafrontrightup.enabled = True
         scoringareafrontrightup.collider = 'box'
+        scoringareafrontrightupcollider.enabled = True
+        scoringareafrontrightupcollider.collider = 'box'
 
     if bluescoreflipped:
         scoringareabackleftdown.enabled = False
         scoringareabackleftdown.collider = None
         scoringareabackleftup.enabled = True
         scoringareabackleftup.collider = 'box'
+        scoringareabackleftupcollider.enabled = True
+        scoringareabackleftupcollider.collider = 'box'
 
         scoringareafrontleftdown.enabled = True
         scoringareafrontleftdown.collider = 'box'
         scoringareafrontleftup.enabled = False
         scoringareafrontleftup.collider = None
+        scoringareafrontleftupcollider.enabled = False
+        scoringareafrontleftupcollider.collider = None
     else:
         scoringareabackleftdown.enabled = True
         scoringareabackleftdown.collider = 'box'
         scoringareabackleftup.enabled = False
         scoringareabackleftup.collider = None
+        scoringareabackleftupcollider.enabled = False
+        scoringareabackleftupcollider.collider = None
 
         scoringareafrontleftdown.enabled = False
         scoringareafrontleftdown.collider = None
         scoringareafrontleftup.enabled = True
         scoringareafrontleftup.collider = 'box'
+        scoringareafrontleftupcollider.enabled = True
+        scoringareafrontleftupcollider.collider = 'box'
         
         
         
@@ -438,20 +455,61 @@ def update():
             if ball.y < -1:
                 balls.remove(ball)
                 destroy(ball)
-            if ball.intersects(traverse_target=scoringareabackrightup).hit:
+                
+                
+            #red ball shenanagins
+            if ball.intersects(traverse_target=scoringareabackrightupcollider).hit:
                 redballs += 1
                 print("red hit")
                 balls.remove(ball)
                 destroy(ball)
-            if ball.intersects(traverse_target=scoringareafrontrightup).hit:
+            if ball.intersects(traverse_target=scoringareafrontrightupcollider).hit:
                 redballs += 1
                 print("red hit")
                 balls.remove(ball)
-                destroy(ball)    
+                destroy(ball)
+            if ball.intersects(traverse_target=scoringareabackrightup).hit:
+                
+                print("red miss")
+                balls.remove(ball)
+                destroy(ball)
+            if ball.intersects(traverse_target=scoringareafrontrightup).hit:
+                
+                print("red miss")
+                balls.remove(ball)
+                destroy(ball)        
             if redballs > 4:
                 redscoreflipped = not redscoreflipped
                 redballs = 0
-    
+            
+            
+            
+            
+            #blueball shenanagins
+            if ball.intersects(traverse_target=scoringareabackleftupcollider).hit:
+                blueballs += 1
+                print("red hit")
+                balls.remove(ball)
+                destroy(ball)
+            if ball.intersects(traverse_target=scoringareafrontleftupcollider).hit:
+                blueballs += 1
+                print("red hit")
+                balls.remove(ball)
+                destroy(ball)
+            if ball.intersects(traverse_target=scoringareabackleftup).hit:
+                
+                print("red miss")
+                balls.remove(ball)
+                destroy(ball)
+            if ball.intersects(traverse_target=scoringareafrontleftup).hit:
+                
+                print("red miss")
+                balls.remove(ball)
+                destroy(ball)        
+            if blueballs > 4:
+                bluescoreflipped = not bluescoreflipped
+                blueballs = 0
+            print(blueballs)
             
             
             
