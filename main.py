@@ -90,6 +90,16 @@ scoringareabackrightup = Entity(
     position=(1, 4, -1.5),
     rotation=(-70, 0, 3)
 )
+
+scoringareabackrightupcollider = Entity(
+    model='cube',
+    scale=(0.99, 0.2, 0.6),
+    texture='blue.png',
+    texture_scale=(1, 1),
+    collider='box',
+    position=(1, 4.15, -1.94),
+    rotation=(-70, 0, 3)
+)
 #scoringareabackrightdown.visible = False
 
 
@@ -114,6 +124,18 @@ scoringareabackleftup = Entity(
     position=(-1, 4, -1.5),
     rotation=(-70, 0, 3)
 )
+
+
+scoringareabackleftupcollider = Entity(
+    model='cube',
+    scale=(0.99, 0.2, 0.6),
+    texture='blue.png',
+    texture_scale=(1, 1),
+    collider='box',
+    position=(-1, 4.15, -1.94),
+    rotation=(-70, 0, 3)
+)
+
 #scoringareabackrightdown.visible = False
 
 
@@ -138,6 +160,16 @@ scoringareafrontleftup = Entity(
     position=(-1, 4, 1.5),
     rotation=(-110, 0, 3)
 )
+scoringareafrontleftupcollider = Entity(
+    model='cube',
+    scale=(0.99, 0.2, 0.6),
+    texture='blue.png',
+    texture_scale=(1, 1),
+    collider='box',
+    position=(-1, 4.15, 1.94),
+    rotation=(-110, 0, 3)
+)
+
 #scoringareabackrightdown.visible = False
 
 
@@ -163,6 +195,15 @@ scoringareafrontrightup = Entity(
     texture_scale=(1, 1),
     collider='box',
     position=(1, 4, 1.5),
+    rotation=(-110, 0, 3)
+)
+scoringareafrontrightupcollider = Entity(
+    model='cube',
+    scale=(0.99, 0.2, 0.6),
+    texture='blue.png',
+    texture_scale=(1, 1),
+    collider='box',
+    position=(1, 4.15, 1.94),
     rotation=(-110, 0, 3)
 )
 #scoringareabackrightdown.visible = False
@@ -257,36 +298,48 @@ cube = Entity(
 def update():
     cube.rotation_y = 0
     
-    global xvelo, zvelo, rotation, shoot_pressed, balls, arrow, arm1, scoringareabackrightdown, scoringareabackrightup, scoringareabackleftdown, scoringareabackleftup, scoringareafrontleftdown, scoringareafrontleftup, scoringareafrontrightdown, scoringareafrontrightup, redscoreflipped, bluescoreflipped
+    global xvelo, zvelo, rotation, shoot_pressed, balls, arrow, arm1, scoringareabackrightdown, scoringareabackrightup, scoringareabackleftdown, scoringareabackleftup, scoringareafrontleftdown, scoringareafrontleftup, scoringareafrontrightdown, scoringareafrontrightup, redscoreflipped, bluescoreflipped, redballs, blueballs
     if redscoreflipped:
         scoringareabackrightdown.enabled = False
+        scoringareabackrightdown.collider = None
         scoringareabackrightup.enabled = True
-        
-        scoringareafrontrightdown.enabled = True;
+        scoringareabackrightup.collider = 'box'
+
+        scoringareafrontrightdown.enabled = True
+        scoringareafrontrightdown.collider = 'box'
         scoringareafrontrightup.enabled = False
+        scoringareafrontrightup.collider = None
     else:
-
         scoringareabackrightdown.enabled = True
+        scoringareabackrightdown.collider = 'box'
         scoringareabackrightup.enabled = False
-        
-        scoringareafrontrightdown.enabled = False
-        scoringareafrontrightup.enabled = True
-    
+        scoringareabackrightup.collider = None
 
+        scoringareafrontrightdown.enabled = False
+        scoringareafrontrightdown.collider = None
+        scoringareafrontrightup.enabled = True
+        scoringareafrontrightup.collider = 'box'
 
     if bluescoreflipped:
         scoringareabackleftdown.enabled = False
+        scoringareabackleftdown.collider = None
         scoringareabackleftup.enabled = True
-        
-        scoringareafrontleftdown.enabled = True;
-        scoringareafrontleftup.enabled = False
-    else:
+        scoringareabackleftup.collider = 'box'
 
+        scoringareafrontleftdown.enabled = True
+        scoringareafrontleftdown.collider = 'box'
+        scoringareafrontleftup.enabled = False
+        scoringareafrontleftup.collider = None
+    else:
         scoringareabackleftdown.enabled = True
+        scoringareabackleftdown.collider = 'box'
         scoringareabackleftup.enabled = False
-        
+        scoringareabackleftup.collider = None
+
         scoringareafrontleftdown.enabled = False
+        scoringareafrontleftdown.collider = None
         scoringareafrontleftup.enabled = True
+        scoringareafrontleftup.collider = 'box'
         
         
         
@@ -382,7 +435,24 @@ def update():
             ball.x += ball.xvelocity
             ball.z += ball.zvelocity
             ball.yvelocity = ball.yvelocity - 0.002
-            print(ball.yvelocity)
+            if ball.y < -1:
+                balls.remove(ball)
+                destroy(ball)
+            if ball.intersects(traverse_target=scoringareabackrightup).hit:
+                redballs += 1
+                print("red hit")
+                balls.remove(ball)
+                destroy(ball)
+            if ball.intersects(traverse_target=scoringareafrontrightup).hit:
+                redballs += 1
+                print("red hit")
+                balls.remove(ball)
+                destroy(ball)    
+            if redballs > 4:
+                redscoreflipped = not redscoreflipped
+                redballs = 0
+    
+            
             
             
     
@@ -396,7 +466,7 @@ def input(key):
     if key == 'escape':
         application.quit()
     if key == 'f':
-        print("SHOOTING")
+        
         shoot_pressed = True
     
         
